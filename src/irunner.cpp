@@ -25,6 +25,10 @@ ErrorCode IRunner::executeTemplate(string templateName, smap variables) {
     	string step = el.value().template get<string>();
 
     	auto stepToExecute = this->replacePlaceholdersWithVariables(step, variables);
+		// stepToExecute is empty iff a placeholder could not be resolved.
+		if (stepToExecute.empty()) {
+			return ErrorCode::UnresolvedPlaceholder;
+		}
 
     	int returnCode = system(stepToExecute.c_str());
 		if (returnCode != 0) {
@@ -51,6 +55,12 @@ string IRunner::replacePlaceholdersWithVariables(string executionStep, smap vari
 			auto replacement = variables[placeholder];
 			modifiedString.replace(startPos, endPos - startPos + 1, replacement);
 			startPos += replacement.length();
+		} else {
+			// In this case, there is a placeholder defined that is NOT
+			// given as a variable. Therefore we need to break execution here
+			// to remind the user to supply ALL required variables, as there
+			// are currently no optional placeholders.
+			return "";
 		}
 	}
 

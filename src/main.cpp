@@ -43,6 +43,9 @@ int main(int argc, char **argv) {
         case MalformedKnorkJson:
         cerr << "Malformed knork.json. Template or steps missing!" << std::endl;
         break;
+        case UnresolvedPlaceholder:
+        cerr << "One or more variables are missing! Check your input data and try again." << std::endl;
+        break;
         case UnknownTemplate:
         cerr << "Template name not found. Check your config file!" << std::endl;
         break;
