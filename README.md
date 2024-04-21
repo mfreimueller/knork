@@ -56,4 +56,4 @@ A template consists of a set of steps that are executed sequentially. You can de
 
 ## Dependencies
 
-Knork uses [https://github.com/nlohmann/json](json from nlohmann) and [https://github.com/p-ranav/argparse](argparse from p-ranav).
+Knork uses [json from nlohmann](https://github.com/nlohmann/json) and [argparse from p-ranav](https://github.com/p-ranav/argparse).
