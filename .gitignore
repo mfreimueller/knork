@@ -31,10 +31,10 @@
 *.out
 *.app
 
-# Eclipse
-Debug/
-Release
-
-.cproject
-.project
-.settings/
+CMakeFiles/**
+build/**
+CMakeCache.txt
+cmake_install.cmake
+compile_commands.json
+CPack*
+Makefile
