@@ -18,21 +18,25 @@ using smap = std::map<string, string>;
  * Interface for all runner implementations.
 */
 class IRunner {
+    private:
+    json templateJson;
+
     protected:
     ArgumentParser *argumentParser;
 
-    IRunner(ArgumentParser *argumentParser) {
-        this->argumentParser = argumentParser;
-    }
+    IRunner(ArgumentParser *argumentParser);
 
     ErrorCode executeTemplate(string templateName, smap variables);
 
-    json getTemplateJson();
+    const json getTemplateJson() { return this->templateJson; }
+    const json getGloballyDefinedVariables();
+
+    smap jsonToStringMap(json);
 
     public:
     virtual ErrorCode execute() = 0;
 
-    virtual ~IRunner() { }
+    virtual ~IRunner() {}
 
     private:
     string replacePlaceholdersWithVariables(string executionStep, smap variables);

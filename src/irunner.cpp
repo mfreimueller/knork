@@ -5,12 +5,14 @@
 
 using std::cerr;
 
-json IRunner::getTemplateJson() {
+IRunner::IRunner(ArgumentParser *argumentParser) {
+	this->argumentParser = argumentParser;
+
 	string homeDir = getenv("HOME");
 	auto configPath = homeDir + "/.config/knork/templates.json";
 
 	std::ifstream f(configPath);
-	return json::parse(f);
+	this->templateJson = json::parse(f);
 }
 
 ErrorCode IRunner::executeTemplate(string templateName, smap variables) {
@@ -19,6 +21,10 @@ ErrorCode IRunner::executeTemplate(string templateName, smap variables) {
     if (!templates.contains(templateName)) {
         return ErrorCode::UnknownTemplate;
     }
+
+	// we want to merge the globally defined variables with the variables
+	// passed through the specific runners class
+	variables.merge(this->jsonToStringMap(this->getGloballyDefinedVariables()));
 
     auto templateToExecute = templates[templateName];
     for (auto& el : templateToExecute.items()) {
@@ -65,4 +71,21 @@ string IRunner::replacePlaceholdersWithVariables(string executionStep, smap vari
 	}
 
 	return modifiedString;
+}
+
+const json IRunner::getGloballyDefinedVariables() {
+	if (!this->templateJson.contains("_variables")) {
+		return json();
+	}
+
+	return this->templateJson["_variables"];
+}
+
+smap IRunner::jsonToStringMap(json jsonArray) {
+	smap variables;
+	for (json::iterator it = jsonArray.begin(); it != jsonArray.end(); ++it) {
+		variables[it.key()] = it.value();
+	}
+
+    return variables;
 }

@@ -47,8 +47,11 @@ The second config type is "templates.json" and resides in "~/.config/knork/". It
 {
         "hugo": [
                 "hugo",
-                "rsync -ravuP public/ {path}"
-        ]
+                "rsync -ravuP public/ {SERVER}:{path}"
+        ],
+        "_variables": {
+                "SERVER": "127.0.0.1"
+        }
 }
 ```
 

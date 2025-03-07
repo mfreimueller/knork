@@ -11,7 +11,7 @@ ErrorCode KnorkFileRunner::execute() {
 
     if (config.contains("template")) {
         string templateName = config["template"].template get<string>();
-        auto variables = this->convertVariablesToMap(config);
+        auto variables = this->jsonToStringMap(config["variables"]);
 
         return this->executeTemplate(templateName, variables);
     } else if (config.contains("steps")) {
@@ -27,17 +27,6 @@ json KnorkFileRunner::getLocalConfigJson() {
 
 	std::ifstream f(currentPath.string() + "/knork.json");
 	return json::parse(f);
-}
-
-std::map<string, string> KnorkFileRunner::convertVariablesToMap(json config) {
-    auto jsonVariables = config["variables"];
-
-	smap variables;
-	for (json::iterator it = jsonVariables.begin(); it != jsonVariables.end(); ++it) {
-		variables[it.key()] = it.value();
-	}
-
-    return variables;
 }
 
 ErrorCode KnorkFileRunner::executeSteps(json steps) {
