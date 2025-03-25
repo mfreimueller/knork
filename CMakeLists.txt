@@ -12,4 +12,4 @@ add_executable(knork ${SOURCES})
 
 # target_link_libraries(knork PRIVATE stdc++fs)
 
-install(TARGETS knork RUNTIME DESTINATION bin)
+install(TARGETS knork RUNTIME DESTINATION ${CMAKE_INSTALL_PREFIX}/bin)
